@@ -3,28 +3,33 @@ from pydantic import BaseModel, Field
 
 
 class RegisterRequest(BaseModel):
-    org_name: str
-    username: str
-    password: str
+    # FIX: Enforce non-empty strings
+    org_name: str = Field(..., min_length=1)
+    username: str = Field(..., min_length=1)
+    password: str = Field(..., min_length=1)
 
 
 class LoginRequest(BaseModel):
-    org_name: str
-    username: str
-    password: str
+    # FIX: Enforce non-empty strings
+    org_name: str = Field(..., min_length=1)
+    username: str = Field(..., min_length=1)
+    password: str = Field(..., min_length=1)
 
 
 class RefreshRequest(BaseModel):
-    refresh_token: str
+    # FIX: Enforce non-empty string
+    refresh_token: str = Field(..., min_length=1)
 
 
 class RoomCreateRequest(BaseModel):
-    name: str
-    capacity: int
-    hourly_rate_cents: int
+    # FIX: Enforce non-empty string, positive capacity, and non-negative rate
+    name: str = Field(..., min_length=1)
+    capacity: int = Field(..., gt=0)
+    hourly_rate_cents: int = Field(..., ge=0)
 
 
 class BookingCreateRequest(BaseModel):
-    room_id: int
+    # FIX: Enforce positive room ID
+    room_id: int = Field(..., gt=0)
     start_time: str
     end_time: str
