@@ -77,12 +77,14 @@ def availability(
 
     day_start = datetime.combine(day, time.min)
     day_end = day_start + timedelta(days=1)
+    
     bookings = (
         db.query(Booking)
         .filter(
             Booking.room_id == room.id,
             Booking.status == "confirmed",
-            Booking.end_time > day_start,
+            # FIX: Only filter bookings STARTING on this date per Rule 13 spec
+            Booking.start_time >= day_start,
             Booking.start_time < day_end,
         )
         .order_by(Booking.start_time.asc(), Booking.id.asc())
